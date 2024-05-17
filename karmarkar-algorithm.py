@@ -8,6 +8,7 @@
 #   find answer for all model
 #
 ######################################
+import numpy as np
 #
 # # Dr. Salimifard slide sample
 # A = [1, 1, 1]
