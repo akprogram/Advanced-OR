@@ -1,5 +1,5 @@
 #  به نام خدا
-# Akbar Ghaedi: @1403-08-20..@1403-08-25
+# Akbar Ghaedi: @1403-08-20..@1403-08-25.v1.2
 # SA: Simulated Annealing Homework
 # prof: Dr. Salimifard
 # Metahuristic and AI
@@ -37,26 +37,38 @@ Max_Weight = 10
 Init_Temperature = 250
 Max_iteration = 100
 
-# solution = [- - - - -] 5 bits; Representation for 5 number of IDs: 5..1: 0 to 32 integer
+# solution = [ - - - - - ] 5 bits; Representation for 5 number of IDs: 5..1: 0 to 32 integer
 #   if bit value = 0 then that location was not participated
 #   if bit value = 1 then that location was participated
 #   sample:
-#     location: [5 4 3 2 1]
-#     solution = 10: so binary = [0 1 0 1 0] => [- 4 - 2 -]
+#     location: [ 5 4 3 2 1 ]
+#     solution = 10: so binary = [ 0 1 0 1 0 ] => [ - 4 - 2 - ]
 #     fitness = 25 + 15 = 40
 #     weight limitation = 4 + 1 = 5
 
 def SimulatedAnnealing():   # The main function to run Simulated Annealing algorithm
   
   # initialize
-  curSolution = CreateInitializeSolution()
+  t = 0   # loop iteration
+  help(f"----- initialization -----")
+  while(True):      # may be initialization solution was not satisfied problem limitation, so we use loop to find first satisfied solution
+    t += 1
+    curSolution = CreateInitializeSolution()
+    help(f"curSolution = {curSolution}, b:[{Bin(curSolution)}]")
+    solutionWeightLimitation = CalculateWeightLimitation(curSolution)
+    if solutionWeightLimitation <= Max_Weight: # check initialize solution weight limitation to break loop
+      break
+    else:
+      help(f"Reject Solution: limitation was not satisfied. iteration: {t}, solutionWeightLimitation = {solutionWeightLimitation}")
+      
   bestSolution = curSolution
   bestFitness = CalculateFitness(curSolution)
-  solutionWeightLimitation = CheckWeightLimitation(curSolution)
+
   tFindBestSolution = 0
   t = 0   # loop iteration
 
   # loop to find best solution
+  help(f"----- loop to find best solution -----")
   while(t < Max_iteration):
     t += 1
     help(f"----- iteration: {t} -----")
@@ -95,7 +107,7 @@ def SimulatedAnnealing():   # The main function to run Simulated Annealing algor
 
 def CreateInitializeSolution():   # generate first randomly solution
   # solution as 5 bits number [? ? ? ? ?] and ? = 0/1
-  return random.randrange(0, 31)     # initialize solution for 5 bits
+  return random.randrange(0, 31)     # initialize solution for 5 bits, randomly
 
 def CreateSolution(solution):     # Create a neighbor solution with a small change: by change one bit
   pos = random.randint(0, 4)      # select 1 bit position, to change value
